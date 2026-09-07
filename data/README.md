@@ -26,9 +26,3 @@ All quantities used in the paper are harmonized to a woman of reproductive age w
 ## Privacy review
 
 An automated and structural review on 7 September 2026 found no email addresses, telephone numbers, direct identifiers, hidden worksheets, external workbook links, or individual/household-level rows. Workbook creator metadata names the repository author or source team in some files; this is consistent with this public, author-identified release.
-
-## Reuse and third-party rights
-
-The repository's MIT licence applies to original source code, not automatically to third-party data or source databases represented in these derived workbooks. Citations establish provenance but do not themselves establish redistribution permission. Users must cite the original sources and comply with their applicable terms.
-
-The authors must confirm that their agreements with WFP and the underlying data providers permit public redistribution of these transformed inputs. If any agreement does not, the affected workbook must be replaced by access instructions or another shareable reproducibility artifact before the submission release is finalized.

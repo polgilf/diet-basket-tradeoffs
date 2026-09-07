@@ -98,8 +98,8 @@ Input datasets are included in the `data/` directory. Key data sources:
 - **Environmental impact coefficients**: Based on Poore & Nemecek (2018) global food systems environmental impact data.
 - **Nutritional requirements**: Population-group-specific dietary reference intakes.
 
-All data inputs required to reproduce the analyses are provided in the repository. See [data/README.md](data/README.md) for file-level provenance, aggregation level, and the boundary between software licensing and third-party data rights.
+All data inputs required to reproduce the analyses are provided in the repository. See [data/README.md](data/README.md) for file-level provenance, aggregation level, and privacy information.
 
 ## License
 
-The original source code is licensed under the MIT License; see [LICENSE](LICENSE). That licence does not grant rights in third-party input data. Data users must follow the source-specific terms described in [data/README.md](data/README.md).
+The original source code is licensed under the MIT License; see [LICENSE](LICENSE).
