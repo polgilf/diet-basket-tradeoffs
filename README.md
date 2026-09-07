@@ -5,11 +5,13 @@
 
 This repository provides the data, code, and analysis notebooks for a multi-objective diet optimization and decision-support framework applied to Cambodia. The framework generates Pareto-efficient diet baskets that simultaneously consider affordability, greenhouse gas emissions (GHGe), and dietary continuity (deviation from current consumption patterns), and supports the selection of compromise solutions through multi-criteria decision analysis.
 
+The version accompanying the *Food Security* submission is [`v1.0.0-submission`](https://github.com/polgilf/diet-basket-tradeoffs/releases/tag/v1.0.0-submission). Use that immutable release, rather than the moving `main` branch, to reproduce the submitted results.
+
 ## Overview
 
 The framework consists of three main stages:
 
-1. **Mathematical model formulation** — a multi-objective linear program (LP) that simultaneously minimizes three objectives: cost, GHGe, and a dietary-shift index measuring deviation from observed consumption patterns, subject to nutritional adequacy, food group balance, and dietary continuity constraints.
+1. **Mathematical model formulation** — a mixed-integer multi-objective linear program that simultaneously minimizes three objectives: cost, GHGe, and a dietary-shift index measuring deviation from observed consumption patterns, subject to nutritional adequacy, food group balance, and dietary continuity constraints. Binary indicators prevent simultaneous positive lower- and upper-bound deviations for a food subgroup.
 2. **RNBI (Revised Normal Boundary Intersection)** — generates a discrete set of Pareto-efficient diet baskets by systematically exploring the trade-off surface defined by the LP model.
 3. **VIKOR (Multi-Criteria Decision Making)** — ranks the generated baskets and identifies compromise solutions under different preference weightings, supporting transparent decision-making rather than prescribing a single "optimal" diet.
 
@@ -20,9 +22,11 @@ The tool is designed as a decision-support system: it maps the feasible trade-of
 ```
 .
 ├── README.md
-├── BLUEPRINT.md                          # Detailed repository overview
 ├── EXAMPLE.md                            # Quick-start guide and workflow walkthrough
+├── REPRODUCIBILITY.md                    # Exact environment and rerun instructions
+├── CITATION.cff                          # Machine-readable citation metadata
 ├── requirements.txt
+├── requirements-lock.txt                 # Fully resolved Python 3.12 environment
 ├── LICENSE
 ├── code/
 │   ├── classes/                           # Core Python modules
@@ -37,10 +41,9 @@ The tool is designed as a decision-support system: it maps the feasible trade-of
 │   │   ├── PLOTS.py                       # Pareto front and comparison visualizations
 │   │   └── utils.py                       # Reference point distribution utilities
 │   └── usage-examples/                    # Tutorial notebooks
-│       ├── 1-Data-Model-Molp.ipynb
+│       ├── Data-Model-Molp.ipynb
 │       ├── Data-class.ipynb
-│       ├── Model-class.ipynb
-│       └── all.ipynb
+│       └── Model-class.ipynb
 ├── data/                                  # Input datasets (Excel)
 │   ├── food_items_match.xlsx
 │   ├── food_prices.xlsx
@@ -49,7 +52,7 @@ The tool is designed as a decision-support system: it maps the feasible trade-of
 │   ├── food_consumption.xlsx
 │   ├── nutritional_requirements.xlsx
 │   ├── afe_factors.xlsx
-│   └── ...                                # Additional data files (see BLUEPRINT.md)
+│   └── ...                                # Additional model input tables
 └── results/                               # Region-specific analysis notebooks
     ├── a-kampot-and-kep-woman/
     ├── b-mondulkiri-and-rattanakiri/
@@ -59,15 +62,20 @@ The tool is designed as a decision-support system: it maps the feasible trade-of
 
 ## Installation
 
-**Requirements:** Python 3.11 or higher.
+**Requirements:** Python 3.12.10. The direct and transitive package versions used for the submission release are pinned in `requirements-lock.txt`.
 
 ```bash
 git clone https://github.com/polgilf/diet-basket-tradeoffs.git
 cd diet-basket-tradeoffs
-pip install -r requirements.txt
+git checkout v1.0.0-submission
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements-lock.txt  # Windows
+# .venv/bin/python -m pip install -r requirements-lock.txt    # macOS/Linux
 ```
 
-Note: PuLP uses the HiGHS solver for optimization. The `highspy` package is included in `requirements.txt` so it is installed automatically; without it you may see `PulpSolverError: HiGHS: Not Available`.
+Run `.venv\Scripts\python scripts/smoke_test.py` on Windows, or `.venv/bin/python scripts/smoke_test.py` on macOS/Linux, to exercise data loading, model construction, RNBI generation, and VIKOR selection. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for the complete regional workflow and expected artifacts.
+
+Primary optimization calls use HiGHS through `highspy`; the current RNBI dominance-check implementation calls PuLP's bundled CBC backend. Both are installed with the pinned environment.
 
 ## Quick Start
 
@@ -90,8 +98,8 @@ Input datasets are included in the `data/` directory. Key data sources:
 - **Environmental impact coefficients**: Based on Poore & Nemecek (2018) global food systems environmental impact data.
 - **Nutritional requirements**: Population-group-specific dietary reference intakes.
 
-All data inputs required to reproduce the analyses are provided in the repository.
+All data inputs required to reproduce the analyses are provided in the repository. See [data/README.md](data/README.md) for file-level provenance, aggregation level, and the boundary between software licensing and third-party data rights.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+The original source code is licensed under the MIT License; see [LICENSE](LICENSE). That licence does not grant rights in third-party input data. Data users must follow the source-specific terms described in [data/README.md](data/README.md).
