@@ -29,16 +29,20 @@ from VIKOR import VIKOR
 data = Data(data_dir="data")
 
 # Pick a population group + region present in the data
-population_group = "Woman of reproductive age"  # example label in nutritional_requirements.xlsx
+population_group = (
+    "Woman of reproductive age"  # example label in nutritional_requirements.xlsx
+)
 region = "Kampot and Kep"  # example label in food_prices.xlsx / food_consumption.xlsx
 
 # --- 2) RNBI optimization ---
 model = Model(data, population_group=population_group, region=region)
-model.set_objective_limits({
-    "Cost (KHR/day)": None,
-    "Dietary-shift index (unitless)": 2,
-    "CO2e (Kg/day)": 5,
-})
+model.set_objective_limits(
+    {
+        "Cost (KHR/day)": None,
+        "Dietary-shift index (unitless)": 2,
+        "CO2e (Kg/day)": 5,
+    }
+)
 
 # cutting_points controls the granularity of the Pareto front sampling
 rnbi = RNBI(model, cutting_points=5, normalize=True, plane_point="nadir")
